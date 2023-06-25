@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "c4500924-4c20-4077-bd58-e5419cfaf106",
+		"name": "GB Anomaly Tracker API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Criar Detector",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"metricName\": \"Volume de Vendas\",\n    \"alertVariation\": 10,\n    \"alertIntervalMinutes\": 1,\n    \"alertMessage\": \"Alerta! Variação detectada\",\n    \"alertChannel\": \"Slack\",\n    \"direction\": \"abaixo\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/detectors",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obter Todos os Detectores",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/detectors",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obter Detector por ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/detectors/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizar Detector",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"metricName\": \"Volume de Vendas\",\n    \"alertVariation\": 20,\n    \"alertIntervalMinutes\": 30,\n    \"alertMessage\": \"Alerta! Variação detectada\",\n    \"alertChannel\": \"Slack\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/detectors/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deletar Detector",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/detectors/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar Anomalia",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"detectedValue\": 120\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/detectors/1/anomalies",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors",
+						"1",
+						"anomalies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deletar Anomalia",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/detectors/1/anomalies/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors",
+						"1",
+						"anomalies",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar Métrica",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"metricName\": \"Volume de Vendas\",\n    \"value\": 1\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/metrics",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"metrics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar Métricas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/metrics",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"metrics"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
