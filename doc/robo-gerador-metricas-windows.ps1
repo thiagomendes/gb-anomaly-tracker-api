@@ -23,4 +23,6 @@ while ($true) {
     Start-Sleep -Seconds 5
 }
 
-# Para rodar: .\robo-gerador-metricas-windows.ps1 "Volume de Vendas"
+# Para rodar:
+# Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+# .\robo-gerador-metricas-windows.ps1 "Volume de Vendas"
