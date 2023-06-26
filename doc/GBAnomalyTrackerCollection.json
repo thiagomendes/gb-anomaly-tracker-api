@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c4500924-4c20-4077-bd58-e5419cfaf106",
+		"_postman_id": "0ab76eec-89ae-4246-b884-0e2e634555f6",
 		"name": "GB Anomaly Tracker API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -17,7 +17,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"metricName\": \"Volume de Vendas\",\n    \"alertVariation\": 10,\n    \"alertIntervalMinutes\": 1,\n    \"alertMessage\": \"Alerta! Variação detectada\",\n    \"alertChannel\": \"Slack\",\n    \"direction\": \"abaixo\"\n}"
+					"raw": "{\n    \"metricName\": \"Volume de Vendas\",\n    \"alertVariation\": 10,\n    \"alertIntervalMinutes\": 1,\n    \"alertMessage\": \"Foi detectada uma variação de 10% abaixo do volume de vendas padrão\",\n    \"alertChannel\": [\"Slack\", \"Telegram\"],\n    \"direction\": \"abaixo\"\n}"
 				},
 				"url": {
 					"raw": "{{baseUrl}}/detectors",
@@ -78,7 +78,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"metricName\": \"Volume de Vendas\",\n    \"alertVariation\": 20,\n    \"alertIntervalMinutes\": 30,\n    \"alertMessage\": \"Alerta! Variação detectada\",\n    \"alertChannel\": \"Slack\"\n}"
+					"raw": "{\n    \"metricName\": \"Volume de Vendas\",\n    \"alertVariation\": 20,\n    \"alertIntervalMinutes\": 30,\n    \"alertMessage\": \"Alerta! Variação detectada\",\n    \"alertChannel\": [\"Slack\", \"Telegram\"]\n}"
 				},
 				"url": {
 					"raw": "{{baseUrl}}/detectors/1",

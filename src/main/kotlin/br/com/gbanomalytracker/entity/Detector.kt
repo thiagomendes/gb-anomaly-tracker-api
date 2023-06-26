@@ -1,12 +1,6 @@
 package br.com.gbanomalytracker.entity
 
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.OneToMany
+import jakarta.persistence.*
 
 @Entity
 data class Detector(
@@ -17,7 +11,7 @@ data class Detector(
     var alertVariation: Double,
     var alertIntervalMinutes: Int,
     var alertMessage: String,
-    var alertChannel: String,
+    var alertChannel: List<String> = mutableListOf(),
     var direction: String,
     @OneToMany(cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY)
     var anomalies: MutableList<Anomaly> = ArrayList(),

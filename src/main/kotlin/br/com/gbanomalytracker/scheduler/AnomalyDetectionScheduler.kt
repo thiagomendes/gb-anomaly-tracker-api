@@ -1,7 +1,9 @@
 package br.com.gbanomalytracker.scheduler
 
+import br.com.gbanomalytracker.client.NotificationClient
 import br.com.gbanomalytracker.entity.Anomaly
 import br.com.gbanomalytracker.entity.AnomalyAnalysisResult
+import br.com.gbanomalytracker.entity.Detector
 import br.com.gbanomalytracker.repository.AnomalyAnalysisResultRepository
 import br.com.gbanomalytracker.service.DetectorService
 import br.com.gbanomalytracker.service.TelemetryService
@@ -16,6 +18,7 @@ import java.time.LocalDateTime
 class AnomalyDetectionScheduler(
     private val detectorService: DetectorService,
     private val telemetryService: TelemetryService,
+    private val notifiers: List<NotificationClient>,
     private val anomalyAnalysisResultRepository: AnomalyAnalysisResultRepository,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(AnomalyDetectionScheduler::class.java)
@@ -80,6 +83,8 @@ class AnomalyDetectionScheduler(
                         detectorService.createAnomaly(detectorId, anomaly)
 
                         logger.info("Anomalia registrada no detector: ID = $detectorId")
+
+                        sendNotification(detector)
                     }
                 } else {
                     logger.info("Nenhuma anomalia detectada.")
@@ -104,4 +109,11 @@ class AnomalyDetectionScheduler(
             else -> false
         }
     }
+
+    fun sendNotification(detector: Detector) {
+        notifiers.stream()
+            .filter { detector.alertChannel.contains(it.getChannel()) }
+            .forEach { it.sendNotification(detector.alertMessage) }
+    }
+
 }
