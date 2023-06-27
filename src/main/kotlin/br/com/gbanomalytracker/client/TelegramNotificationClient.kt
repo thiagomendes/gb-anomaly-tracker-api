@@ -2,7 +2,10 @@ package br.com.gbanomalytracker.client
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.http.*
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 
@@ -33,10 +36,8 @@ class TelegramNotificationClient : NotificationClient {
 
         val entity = HttpEntity(requestBody, headers)
 
-        val response: ResponseEntity<String> = restTemplate.exchange(url, HttpMethod.POST, entity, String::class.java)
-        // Tratamentos adicionais na resposta, se necessário
+        restTemplate.exchange(url, HttpMethod.POST, entity, String::class.java)
     }
 
     override fun getChannel() = "Telegram"
 }
-

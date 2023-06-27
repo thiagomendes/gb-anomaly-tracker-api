@@ -1,6 +1,5 @@
 package br.com.gbanomalytracker.service
 
-import br.com.gbanomalytracker.dto.MetricPeriodResponse
 import br.com.gbanomalytracker.entity.Telemetry
 import br.com.gbanomalytracker.repository.TelemetryRepository
 import org.springframework.stereotype.Service
