@@ -63,7 +63,6 @@ class AnomalyDetectionScheduler(
                 val anomalyDetected = isAnomaly(variation, detector.alertVariation, detector.direction)
 
                 val analysisResult = AnomalyAnalysisResult(
-                    metricName = detector.metricName,
                     timestamp = currentTime,
                     value = secondSum,
                     isAnomaly = anomalyDetected,
@@ -115,5 +114,4 @@ class AnomalyDetectionScheduler(
             .filter { detector.alertChannel.contains(it.getChannel()) }
             .forEach { it.sendNotification(detector.alertMessage) }
     }
-
 }

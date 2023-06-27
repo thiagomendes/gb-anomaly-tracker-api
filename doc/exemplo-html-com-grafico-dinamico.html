@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Detector de Anomalias</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .anomaly-marker {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">GB Anomaly Tracker</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="cadastro.html">Cadastro de Detector</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="lista.html">Lista de Detectores</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Detalhes do Detector de Anomalias</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Data e Hora</th>
+                    <th>Valor da Métrica</th>
+                    <th>Mensagem de Alerta</th>
+                </tr>
+            </thead>
+            <tbody id="detectorDetails"></tbody>
+        </table>
+        <canvas id="detectorChart"></canvas>
+    </div>
+    <script>
+        // Função para formatar a data e hora
+        function formatDateTime(dateTime) {
+            const options = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            return new Date(dateTime).toLocaleTimeString('pt-BR', options);
+        }
+
+        // Função para popular os detalhes do detector
+        function populateDetectorDetails(data) {
+            const detectorDetails = document.getElementById('detectorDetails');
+            detectorDetails.innerHTML = '';
+
+            data.anomalies.forEach(anomaly => {
+                const row = document.createElement('tr');
+
+                const dateTimeCell = document.createElement('td');
+                dateTimeCell.textContent = formatDateTime(anomaly.detectedTime);
+                row.appendChild(dateTimeCell);
+
+                const valueCell = document.createElement('td');
+                valueCell.textContent = anomaly.detectedValue;
+                row.appendChild(valueCell);
+
+                const alertMessageCell = document.createElement('td');
+                alertMessageCell.textContent = data.alertMessage;
+                row.appendChild(alertMessageCell);
+
+                detectorDetails.appendChild(row);
+            });
+        }
+
+        // Função para popular o gráfico com destaque para anomalias
+        function populateChart(labels, dataValues, anomalyFlags) {
+            const ctx = document.getElementById('detectorChart').getContext('2d');
+
+            const data = {
+                labels: labels.map(dateTime => formatDateTime(dateTime)),
+                datasets: [{
+                    label: 'Valor da Métrica',
+                    data: dataValues,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1,
+                    pointBackgroundColor: anomalyFlags.map(isAnomaly => isAnomaly ? 'red' : 'rgb(75, 192, 192)')
+                }]
+            };
+
+            const config = {
+                type: 'line',
+                data: data,
+                options: {}
+            };
+
+            new Chart(ctx, config);
+        }
+
+        // Função para buscar e popular os dados do detector
+        function fetchAndPopulateData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const detectorId = 1;
+
+            fetch(`http://localhost:8080/detectors/${detectorId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const anomalyFlags = data.anomalyAnalysisResults.map(result => result.isAnomaly);
+                    populateDetectorDetails(data);
+                    populateChart(
+                        data.anomalyAnalysisResults.map(result => result.timestamp),
+                        data.anomalyAnalysisResults.map(result => result.value),
+                        anomalyFlags
+                    );
+                })
+                .catch(error => console.error('Ocorreu um erro:', error));
+        }
+
+        // Chamada inicial para buscar e popular os dados do detector
+        fetchAndPopulateData();
+    </script>
+</body>
+</html>
