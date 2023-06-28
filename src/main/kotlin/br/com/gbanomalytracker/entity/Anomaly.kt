@@ -1,38 +1,31 @@
 package br.com.gbanomalytracker.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
-@Schema(description = "A entidade Anomaly representa uma anomalia detectada em uma métrica monitorada.")
+@Schema(description = "A entidade Anomaly representa uma anomalia detectada pelo detector.")
 data class Anomaly(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @field:Schema(
-        description = "ID da Anomalia",
-        example = "1",
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     @field:Schema(
-        description = "Valor detectado da Anomalia",
-        example = "150.0",
+        description = "Detector que detectou a anomalia",
+        example = "1",
     )
-    var detectedValue: Double,
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "detector_id")
+    var detector: Detector,
 
     @field:Schema(
-        description = "Data e hora em que a Anomalia foi detectada",
-        example = "2023-06-22T12:00:00",
+        description = "Data e hora em que a anomalia foi detectada",
+        example = "2023-06-27T12:00:00",
     )
-    val detectedTime: LocalDateTime,
+    var timestamp: LocalDateTime = LocalDateTime.now(),
 
-    @field:Schema(
-        description = "Variação detectada da Anomalia",
-        example = "30.0",
     )
-    var detectedVariation: Double,
-)
+

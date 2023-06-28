@@ -15,7 +15,7 @@ sendTelemetry() {
 
 # Função para gerar um valor aleatório entre 1 e 10
 generateRandomValue() {
-  local value=$((RANDOM % 10 + 1))
+  local value=$((RANDOM % 30 + 1))
   echo "$value"
 }
 
@@ -26,7 +26,7 @@ while true; do
 
   echo "Envio de telemetria concluído."
 
-  sleep 5
+  sleep 2
 done
 
 # Para rodar: ./doc/robo-gerador-metricas.sh "Volume de Vendas"

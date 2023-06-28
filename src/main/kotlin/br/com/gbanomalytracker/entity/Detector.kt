@@ -1,13 +1,7 @@
 package br.com.gbanomalytracker.entity
 
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.OneToMany
+import jakarta.persistence.*
 
 @Entity
 @Schema(description = "A entidade Detector representa um detector de anomalias, contendo informações sobre a métrica monitorada, as configurações de alerta, os dados de anomalias detectadas e o objetivo do detector.")
@@ -38,7 +32,7 @@ data class Detector(
         description = "Intervalo de monitoramento em minutos",
         example = "5",
     )
-    var alertIntervalMinutes: Int,
+    var alertIntervalMinutes: Long,
 
     @field:Schema(
         description = "Mensagem que será apresentada quando uma anomalia for detectada",
@@ -73,6 +67,9 @@ data class Detector(
     @OneToMany(cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY)
     var anomalies: MutableList<Anomaly> = ArrayList(),
 
-    @OneToMany(cascade = arrayOf(CascadeType.ALL), mappedBy = "detector")
-    val anomalyAnalysisResults: List<AnomalyAnalysisResult> = mutableListOf(),
+    @field:Schema(
+        description = "Método de agregação para métricas",
+        example = "avg, count, sum",
+    )
+    var aggregationMethod: String,
 )

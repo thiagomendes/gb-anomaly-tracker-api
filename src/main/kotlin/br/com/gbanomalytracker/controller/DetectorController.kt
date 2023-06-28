@@ -1,16 +1,10 @@
 package br.com.gbanomalytracker.controller
 
+import br.com.gbanomalytracker.dto.TelemetryAggregate
 import br.com.gbanomalytracker.entity.Anomaly
 import br.com.gbanomalytracker.entity.Detector
 import br.com.gbanomalytracker.service.DetectorService
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/detectors")
@@ -39,4 +33,9 @@ class DetectorController(private val detectorService: DetectorService) {
     @DeleteMapping("/{id}/anomalies/{anomalyId}")
     fun deleteAnomaly(@PathVariable id: Long, @PathVariable anomalyId: Long) =
         detectorService.deleteAnomaly(id, anomalyId)
+
+    @GetMapping("/{detectorId}/telemetry")
+    fun getAggregatedTelemetry(@PathVariable detectorId: Long): List<TelemetryAggregate> {
+        return detectorService.getAggregatedTelemetry(detectorId)
+    }
 }
