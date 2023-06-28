@@ -16,16 +16,14 @@ interface TelemetryRepository : JpaRepository<Telemetry, Long> {
     ): List<Telemetry>
 
     @Query(
-        "SELECT t FROM Telemetry t WHERE t.metricName = :metricName AND t.timestamp >= :startTime"
+        "SELECT t FROM Telemetry t WHERE t.metricName = :metricName AND t.timestamp >= :startTime",
     )
     fun findLastMinutes(metricName: String, startTime: LocalDateTime): List<Telemetry>
 
-
     @Query(
-        "SELECT t FROM Telemetry t WHERE t.metricName = :metricName AND t.timestamp >= :startTime AND t.timestamp < :endTime"
+        "SELECT t FROM Telemetry t WHERE t.metricName = :metricName AND t.timestamp >= :startTime AND t.timestamp < :endTime",
     )
     fun findLastMinutes(metricName: String, startTime: LocalDateTime, endTime: LocalDateTime): List<Telemetry>
 
     fun findAllByMetricName(metricName: String, pageable: Pageable): List<Telemetry>
-
 }

@@ -1,10 +1,13 @@
 package br.com.gbanomalytracker.entity
 
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 import java.time.LocalDateTime
 
 @Entity
@@ -35,4 +38,7 @@ data class Telemetry(
         example = "2023-06-22T12:00:00",
     )
     val timestamp: LocalDateTime = LocalDateTime.now(),
+
+    @OneToMany(cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY)
+    var params: MutableList<TelemetryParam>? = ArrayList(),
 )

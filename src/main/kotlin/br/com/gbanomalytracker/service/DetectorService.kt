@@ -4,6 +4,8 @@ import br.com.gbanomalytracker.client.NotificationClient
 import br.com.gbanomalytracker.dto.TelemetryAggregate
 import br.com.gbanomalytracker.entity.Anomaly
 import br.com.gbanomalytracker.entity.Detector
+import br.com.gbanomalytracker.entity.DetectorParam
+import br.com.gbanomalytracker.entity.TelemetryParam
 import br.com.gbanomalytracker.repository.AnomalyRepository
 import br.com.gbanomalytracker.repository.DetectorRepository
 import br.com.gbanomalytracker.repository.TelemetryRepository
@@ -72,23 +74,42 @@ class DetectorService(
         val startTimeCurrentInterval = currentTime.minusMinutes(detector.alertIntervalMinutes.toLong())
         val startTimePreviousInterval = startTimeCurrentInterval.minusMinutes(detector.alertIntervalMinutes.toLong())
 
+        val inputParams: List<TelemetryParam> = detector.params?.map { it.toTelemetryParam() } ?: emptyList()
+
         val telemetriesCurrentInterval =
             telemetryRepository.findLastMinutes(detector.metricName, startTimeCurrentInterval)
+                .filter { telemetry ->
+                    inputParams.all { inputParam ->
+                        telemetry.params?.any { param ->
+                            param.key == inputParam.key && param.value == inputParam.value
+                        } ?: false
+                    }
+                }
 
         val telemetriesPreviousInterval = telemetryRepository.findLastMinutes(
             detector.metricName,
             startTimePreviousInterval,
-            startTimeCurrentInterval
-        )
+            startTimeCurrentInterval,
+        ).filter { telemetry ->
+            inputParams.all { inputParam ->
+                telemetry.params?.any { param ->
+                    param.key == inputParam.key && param.value == inputParam.value
+                } ?: false
+            }
+        }
 
         logger.info("Iniciando a verificação de anomalias para o detector: ${detector.id}")
-        logger.info("Usando métricas de ${startTimeCurrentInterval} até agora para o intervalo atual.")
-        logger.info("Usando métricas de ${startTimePreviousInterval} até ${startTimeCurrentInterval} para o intervalo anterior.")
+        logger.info("Usando métricas de $startTimeCurrentInterval até agora para o intervalo atual.")
+        logger.info("Usando métricas de $startTimePreviousInterval até $startTimeCurrentInterval para o intervalo anterior.")
 
         // De acordo com o aggregationMethod, calculamos a métrica relevante
         val metricCurrentInterval = when (detector.aggregationMethod) {
-            "avg" -> if (telemetriesCurrentInterval.isNotEmpty()) telemetriesCurrentInterval.map { it.value }
-                .average() else 0.0
+            "avg" -> if (telemetriesCurrentInterval.isNotEmpty()) {
+                telemetriesCurrentInterval.map { it.value }
+                    .average()
+            } else {
+                0.0
+            }
 
             "sum" -> telemetriesCurrentInterval.sumOf { it.value }
             "count" -> telemetriesCurrentInterval.count().toDouble()
@@ -96,8 +117,12 @@ class DetectorService(
         }
 
         val metricPreviousInterval = when (detector.aggregationMethod) {
-            "avg" -> if (telemetriesPreviousInterval.isNotEmpty()) telemetriesPreviousInterval.map { it.value }
-                .average() else 0.0
+            "avg" -> if (telemetriesPreviousInterval.isNotEmpty()) {
+                telemetriesPreviousInterval.map { it.value }
+                    .average()
+            } else {
+                0.0
+            }
 
             "sum" -> telemetriesPreviousInterval.sumOf { it.value }
             "count" -> telemetriesPreviousInterval.count().toDouble()
@@ -127,7 +152,7 @@ class DetectorService(
             detector.id?.let { detectorId ->
                 val anomaly = Anomaly(
                     detector = detector,
-                    timestamp = startTimeCurrentInterval
+                    timestamp = startTimeCurrentInterval,
                 )
                 createAnomaly(detectorId, anomaly)
                 sendNotification(detector)
@@ -145,7 +170,16 @@ class DetectorService(
         val detector = detectorRepository.findById(detectorId)
             .orElseThrow { NoSuchElementException("Detector with id: $detectorId not found") }
 
+        val inputParams: List<TelemetryParam> = detector.params?.map { it.toTelemetryParam() } ?: emptyList()
+
         val telemetries = telemetryRepository.findAllByMetricName(detector.metricName, PageRequest.of(0, 1000))
+            .filter { telemetry ->
+                inputParams.all { inputParam ->
+                    telemetry.params?.any { param ->
+                        param.key == inputParam.key && param.value == inputParam.value
+                    } ?: false
+                }
+            }
 
         return telemetries
             .groupBy { it.timestamp.truncatedTo(ChronoUnit.MINUTES) }
@@ -158,5 +192,13 @@ class DetectorService(
                 }
                 TelemetryAggregate(timestamp = timestamp, value = value)
             }
+    }
+
+    fun DetectorParam.toTelemetryParam(): TelemetryParam {
+        return TelemetryParam(
+            id = this.id,
+            key = this.key,
+            value = this.value,
+        )
     }
 }

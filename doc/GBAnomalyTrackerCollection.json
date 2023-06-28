@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "89ecc662-a6f0-40a2-93cd-ff53f72f6dd7",
+		"_postman_id": "0afeea22-17c0-4fca-acfe-6bb191894ffd",
 		"name": "GB Anomaly Tracker API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -17,12 +17,16 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"detectorName\": \"Detector de volume de vendas\",\n    \"metricName\": \"Volume de Vendas\",\n    \"alertVariation\": 10,\n    \"alertIntervalMinutes\": 1,\n    \"alertMessage\": \"Foi detectada uma variação de 10% abaixo do volume de vendas padrão\",\n    \"alertChannel\": [\"Slack\", \"Telegram\"],\n    \"direction\": \"abaixo\",\n    \"action\": \"Acionar o time de vendas\",\n    \"objective\": \"Monitorar e identificar quedas significativas no volume de vendas\"\n}"
+					"raw": "{\n    \"detectorName\": \"Detector de volume de vendas\",\n    \"metricName\": \"Volume de Vendas\",\n    \"alertVariation\": 10,\n    \"alertIntervalMinutes\": 1,\n    \"alertMessage\": \"Foi detectada uma variação de 10% abaixo do volume de vendas padrão\",\n    \"alertChannel\": [\"Slack\", \"Telegram\"],\n    \"direction\": \"abaixo\",\n    \"action\": \"Acionar o time de vendas\",\n    \"objective\": \"Monitorar e identificar quedas significativas no volume de vendas\",\n    \"aggregationMethod\": \"sum\"\n}"
 				},
 				"url": {
 					"raw": "{{baseUrl}}/detectors",
-					"host": ["{{baseUrl}}"],
-					"path": ["detectors"]
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors"
+					]
 				}
 			},
 			"response": []
@@ -34,8 +38,12 @@
 				"header": [],
 				"url": {
 					"raw": "{{baseUrl}}/detectors",
-					"host": ["{{baseUrl}}"],
-					"path": ["detectors"]
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors"
+					]
 				}
 			},
 			"response": []
@@ -47,8 +55,13 @@
 				"header": [],
 				"url": {
 					"raw": "{{baseUrl}}/detectors/1",
-					"host": ["{{baseUrl}}"],
-					"path": ["detectors", "1"]
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors",
+						"1"
+					]
 				}
 			},
 			"response": []
@@ -69,8 +82,13 @@
 				},
 				"url": {
 					"raw": "{{baseUrl}}/detectors/1",
-					"host": ["{{baseUrl}}"],
-					"path": ["detectors", "1"]
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors",
+						"1"
+					]
 				}
 			},
 			"response": []
@@ -82,8 +100,13 @@
 				"header": [],
 				"url": {
 					"raw": "{{baseUrl}}/detectors/1",
-					"host": ["{{baseUrl}}"],
-					"path": ["detectors", "1"]
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors",
+						"1"
+					]
 				}
 			},
 			"response": []
@@ -104,8 +127,38 @@
 				},
 				"url": {
 					"raw": "{{baseUrl}}/metrics",
-					"host": ["{{baseUrl}}"],
-					"path": ["metrics"]
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"metrics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar Métrica Com Parametro",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"metricName\": \"Volume de Vendas\",\n    \"value\": 1\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/metrics",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"metrics"
+					]
 				}
 			},
 			"response": []
@@ -117,8 +170,12 @@
 				"header": [],
 				"url": {
 					"raw": "{{baseUrl}}/metrics",
-					"host": ["{{baseUrl}}"],
-					"path": ["metrics"]
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"metrics"
+					]
 				}
 			},
 			"response": []
@@ -129,9 +186,41 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/detectors/1/metrics",
-					"host": ["{{baseUrl}}"],
-					"path": ["detectors", "1", "metrics"]
+					"raw": "{{baseUrl}}/detectors/1/telemetry",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors",
+						"1",
+						"telemetry"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar Detector Parametrizado",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"detectorName\": \"Detector de volume de vendas de IPHONE\",\n    \"metricName\": \"Volume de Vendas\",\n    \"alertVariation\": 10,\n    \"alertIntervalMinutes\": 1,\n    \"alertMessage\": \"Foi detectada uma variação de 10% abaixo do volume de vendas de IPHONE\",\n    \"alertChannel\": [\"Slack\", \"Telegram\"],\n    \"direction\": \"abaixo\",\n    \"action\": \"Acionar o time de vendas de IPHONE\",\n    \"objective\": \"Monitorar e identificar quedas significativas no volume de vendas de IPHONE\",\n    \"aggregationMethod\": \"sum\",\n    \"params\": [\n        {\n            \"key\": \"produto\",\n            \"value\": \"iphone\"\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/detectors",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"detectors"
+					]
 				}
 			},
 			"response": []

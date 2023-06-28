@@ -13,7 +13,6 @@ class AnomalyDetectionScheduler(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(AnomalyDetectionScheduler::class.java)
 
-
     @Transactional
     @Scheduled(cron = "0 * * * * ?")
     fun scheduleCheckAnomalies() {
@@ -23,5 +22,4 @@ class AnomalyDetectionScheduler(
             detectorService.checkAnomalies(detector)
         }
     }
-
 }

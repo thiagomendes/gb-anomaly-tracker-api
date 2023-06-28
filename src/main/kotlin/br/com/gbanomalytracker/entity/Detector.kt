@@ -72,4 +72,7 @@ data class Detector(
         example = "avg, count, sum",
     )
     var aggregationMethod: String,
+
+    @OneToMany(cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY)
+    var params: MutableList<DetectorParam>? = ArrayList(),
 )
