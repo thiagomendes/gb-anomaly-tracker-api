@@ -23,7 +23,7 @@ sendTelemetry() {
 
 # Função para gerar um valor aleatório entre 1 e 10
 generateRandomValue() {
-  local value=$((RANDOM % 30 + 1))
+  local value=100
   echo "$value"
 }
 

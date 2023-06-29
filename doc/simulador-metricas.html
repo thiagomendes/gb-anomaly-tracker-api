@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simulador de envio de telemetria GB Anomaly Tracker</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .input-field {
+            margin-top: 20px;
+        }
+
+        .add-param-btn {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simulador de envio de telemetria GB Anomaly Tracker</h1>
+
+        <div class="input-field">
+            <label for="metricName">Nome da Métrica:</label>
+            <input type="text" id="metricName" name="metricName" required>
+        </div>
+
+        <div class="input-field">
+            <label for="value">Valor da Métrica:</label>
+            <input type="number" id="value" name="value" required>
+        </div>
+
+        <div id="params-container">
+            <!-- Parâmetros adicionais serão adicionados aqui -->
+        </div>
+
+        <button class="add-param-btn waves-effect waves-light btn-small" onclick="addParameter()">Adicionar Parâmetro</button>
+
+        <div class="input-field">
+            <label for="intervalSeconds">Intervalo de Execução (em segundos):</label>
+            <input type="number" id="intervalSeconds" name="intervalSeconds" required>
+        </div>
+
+        <button id="start-button" class="waves-effect waves-light btn" onclick="startSending()">Iniciar Envio</button>
+        <button id="stop-button" class="waves-effect waves-light btn red" onclick="stopSending()" style="display: none;">Parar Envio</button>
+
+        <div id="progress-bar" class="progress" style="visibility: hidden;">
+            <div class="determinate" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        var intervalId;
+        var progressBarWidth = 0;
+
+        function addParameter() {
+            var paramsContainer = document.getElementById("params-container");
+
+            var paramKeyInput = document.createElement("input");
+            paramKeyInput.type = "text";
+            paramKeyInput.name = "paramKey";
+            paramKeyInput.placeholder = "Chave do Parâmetro";
+            paramsContainer.appendChild(paramKeyInput);
+
+            var paramValueInput = document.createElement("input");
+            paramValueInput.type = "text";
+            paramValueInput.name = "paramValue";
+            paramValueInput.placeholder = "Valor do Parâmetro";
+            paramsContainer.appendChild(paramValueInput);
+        }
+
+        function startSending() {
+            document.getElementById('start-button').style.display = 'none';
+            document.getElementById('stop-button').style.display = '';
+            document.getElementById('progress-bar').style.visibility = 'visible';
+
+            var metricName = document.getElementById("metricName").value;
+            var value = document.getElementById("value").value;
+            var params = getParameters();
+
+            var intervalSeconds = document.getElementById("intervalSeconds").value;
+            var intervalMilliseconds = intervalSeconds * 1000;
+
+            intervalId = setInterval(function() {
+                sendMetric(metricName, value, params);
+                animateProgressBar();
+            }, intervalMilliseconds);
+        }
+
+        function stopSending() {
+            document.getElementById('stop-button').style.display = 'none';
+            document.getElementById('start-button').style.display = '';
+            document.getElementById('progress-bar').style.visibility = 'hidden';
+            document.querySelector('#progress-bar .determinate').style.width = '0%';
+
+            clearInterval(intervalId);
+        }
+
+        function getParameters() {
+            var paramKeyInputs = document.getElementsByName("paramKey");
+            var paramValueInputs = document.getElementsByName("paramValue");
+
+            var params = [];
+
+            for (var i = 0; i < paramKeyInputs.length; i++) {
+                var key = paramKeyInputs[i].value.trim();
+                var value = paramValueInputs[i].value.trim();
+
+                if (key && value) {
+                    params.push({
+                        key: key,
+                        value: value
+                    });
+                }
+            }
+
+            return params;
+        }
+
+        function sendMetric(metricName, value, params) {
+            var metric = {
+                metricName: metricName,
+                value: value,
+                params: params
+            };
+
+            console.log(metric);
+            fetch('http://localhost:8080/metrics', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(metric)
+            })
+                .catch(error => console.error(error));
+        }
+
+        function animateProgressBar() {
+            var progressBarElement = document.querySelector('#progress-bar .determinate');
+            progressBarWidth = progressBarWidth >= 100 ? 0 : progressBarWidth + 10;
+            progressBarElement.style.width = progressBarWidth + '%';
+        }
+    </script>
+</body>
+</html>
