@@ -25,7 +25,7 @@ data class Anomaly(
         description = "Data e hora em que a anomalia foi detectada",
         example = "2023-06-27T12:00:00",
     )
-    var timestamp: LocalDateTime = LocalDateTime.now(),
+    var timestamp: LocalDateTime = LocalDateTime.now()
 
     )
 
