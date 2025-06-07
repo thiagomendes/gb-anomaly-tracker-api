@@ -1,6 +1,6 @@
-# GB Anomaly Tracker API
+# TM Anomaly Tracker API
 
-GB Anomaly Tracker API é uma aplicação simples escrita em Kotlin com Spring Boot para registrar métricas e detectar anomalias automaticamente. O projeto surgiu em um hackathon e serve como base para experimentações futuras.
+TM Anomaly Tracker API é uma aplicação simples escrita em Kotlin com Spring Boot para registrar métricas e detectar anomalias automaticamente. O projeto surgiu em um hackathon e serve como base para experimentações futuras.
 
 ## Tecnologias
 
@@ -14,15 +14,15 @@ GB Anomaly Tracker API é uma aplicação simples escrita em Kotlin com Spring B
 Por padrão a aplicação espera uma instância local do PostgreSQL com as seguintes credenciais (veja `src/main/resources/application.properties`):
 
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/gb-anomaly-tracker-db
-spring.datasource.username=gb-anomaly-tracker-db-user
-spring.datasource.password=gb-anomaly-tracker-db-pass
+spring.datasource.url=jdbc:postgresql://localhost:5432/tm-anomaly-tracker-db
+spring.datasource.username=tm-anomaly-tracker-db-user
+spring.datasource.password=tm-anomaly-tracker-db-pass
 ```
 
 É possível subir um banco local rapidamente utilizando Docker:
 
 ```bash
-docker run --name gb-anomaly-tracker-postgres -e POSTGRES_USER=gb-anomaly-tracker-db-user -e POSTGRES_PASSWORD=gb-anomaly-tracker-db-pass -e POSTGRES_DB=gb-anomaly-tracker-db -p 5432:5432 -d postgres
+docker run --name tm-anomaly-tracker-postgres -e POSTGRES_USER=tm-anomaly-tracker-db-user -e POSTGRES_PASSWORD=tm-anomaly-tracker-db-pass -e POSTGRES_DB=tm-anomaly-tracker-db -p 5432:5432 -d postgres
 ```
 
 ## Build e execução
@@ -73,7 +73,7 @@ while true; do
 done
 ```
 
-Há também um arquivo `GBAnomalyTrackerCollection.json` com uma coleção de requisições para o Postman e uma página `simulador-metricas.html` para testes rápidos via navegador.
+Há também um arquivo `TMAnomalyTrackerCollection.json` com uma coleção de requisições para o Postman e uma página `simulador-metricas.html` para testes rápidos via navegador.
 
 ## Contribuição
 

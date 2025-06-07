@@ -1,1 +1,1 @@
-docker run --name gb-anomaly-tracker-postgres -e POSTGRES_USER=gb-anomaly-tracker-db-user -e POSTGRES_PASSWORD=gb-anomaly-tracker-db-pass -e POSTGRES_DB=gb-anomaly-tracker-db -p 5432:5432 -d postgres
+docker run --name tm-anomaly-tracker-postgres -e POSTGRES_USER=tm-anomaly-tracker-db-user -e POSTGRES_PASSWORD=tm-anomaly-tracker-db-pass -e POSTGRES_DB=tm-anomaly-tracker-db -p 5432:5432 -d postgres
