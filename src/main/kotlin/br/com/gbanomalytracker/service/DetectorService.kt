@@ -64,6 +64,7 @@ class DetectorService(
         val anomaly = anomalyRepository.findById(anomalyId)
             .orElseThrow { NoSuchElementException("Anomaly with ID $anomalyId not found") }
         detector.anomalies.removeIf { it.id == anomaly.id }
+        anomalyRepository.delete(anomaly)
         detectorRepository.save(detector)
     }
 
