@@ -35,6 +35,30 @@ mvn spring-boot:run
 
 A documentação interativa da API ficará disponível em `http://localhost:8080/swagger-ui.html`.
 
+## Executando com Docker
+
+Caso prefira utilizar contêineres, siga os passos abaixo para subir a aplicação e o banco de dados utilizando **Docker Compose**:
+
+1. Certifique-se de ter o [Docker](https://docs.docker.com/get-docker/) e o [Docker Compose](https://docs.docker.com/compose/install/) instalados.
+2. Clone este repositório e, no diretório raiz, execute o comando abaixo para construir a imagem e iniciar os serviços:
+
+   ```bash
+   docker compose up --build -d
+   ```
+
+3. Aguarde até que a aplicação esteja pronta. Você pode acompanhar os logs com:
+
+   ```bash
+   docker compose logs -f app
+   ```
+
+4. A API ficará disponível em `http://localhost:8080` e a documentação em `http://localhost:8080/swagger-ui.html`.
+5. Para parar e remover os contêineres, execute:
+
+   ```bash
+   docker compose down
+   ```
+
 ## Endpoints principais
 
 - `POST /metrics` – registra uma nova métrica de telemetria.
